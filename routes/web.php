@@ -31,6 +31,18 @@ Route::group(['middleware' => ['auth']], function() {
         Route::delete('unfollow', 'UserFollowController@destroy')->name('user.unfollow');
         Route::get('followings', 'UsersController@followings')->name('users.followings');
         Route::get('followers', 'UsersController@followers')->name('users.followers');
+        
+        // お気に入りしたメッセージのみを表示
+        Route::get('favorites', 'UsersController@favorites')->name('users.favorites'); 
+    });
+    
+    // お気に入り機能実装
+    Route::group(['prefix' => 'microposts/{id}'], function () {
+        // お気に入り処理
+        Route::post('favorite', 'FavoritesController@store')->name('favorites.favorite');
+        
+        //お気に入り解除処理
+        Route::delete('unfavorite', 'FavoritesController@destroy')->name('favorites.unfavorite');
     });
     
     Route::resource('microposts', 'MicropostsController', ['only' => ['store', 'destroy']]);
